@@ -104,6 +104,12 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
+	  //Count Direction set to 1 by default
+	  //Set prescaler to 0
+	  	  TIM2->PSC = 0;
+	  //Set Auto Reload to 5
+	  	  TIM2->ARR = 80;
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

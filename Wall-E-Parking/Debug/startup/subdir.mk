@@ -15,7 +15,7 @@ startup/%.o: ../startup/%.s
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Assembler'
 	@echo $(PWD)
-	arm-none-eabi-as -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -I"C:/Users/House/Documents/ParkingSystem-Firmware/Wall-E-Parking/HAL_Driver/Inc/Legacy" -I"C:/Users/House/Documents/ParkingSystem-Firmware/Wall-E-Parking/inc" -I"C:/Users/House/Documents/ParkingSystem-Firmware/Wall-E-Parking/CMSIS/device" -I"C:/Users/House/Documents/ParkingSystem-Firmware/Wall-E-Parking/CMSIS/core" -I"C:/Users/House/Documents/ParkingSystem-Firmware/Wall-E-Parking/HAL_Driver/Inc" -g -o "$@" "$<"
+	arm-none-eabi-as -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -I"/Users/Sara/Desktop/ENEL400_2/wallE/ParkingSystem-Firmware/Wall-E-Parking/HAL_Driver/Inc/Legacy" -I"/Users/Sara/Desktop/ENEL400_2/wallE/ParkingSystem-Firmware/Wall-E-Parking/inc" -I"/Users/Sara/Desktop/ENEL400_2/wallE/ParkingSystem-Firmware/Wall-E-Parking/CMSIS/device" -I"/Users/Sara/Desktop/ENEL400_2/wallE/ParkingSystem-Firmware/Wall-E-Parking/CMSIS/core" -I"/Users/Sara/Desktop/ENEL400_2/wallE/ParkingSystem-Firmware/Wall-E-Parking/HAL_Driver/Inc" -g -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

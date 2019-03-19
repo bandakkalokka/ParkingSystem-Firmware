@@ -120,6 +120,75 @@ void segmentDriver(uint8_t digit, uint8_t value){
 
 }
 
+float sensorRead(void){
+	uint32_t time, timeout;
+	//set trigger low
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2,GPIO_PIN_RESET);
+	//delay 2us
+	HAL_Delay(0.002);
+	//trigger high for 10us
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2,GPIO_PIN_SET);
+	//delay 10us
+	HAL_Delay(0.01);
+	//trigger low
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2,GPIO_PIN_RESET);
+
+	//give some time for response
+	timeout = 1000000;
+	while(!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)==0){
+		if(timeout-- == 0x00){
+			return -1;
+		}
+	}
+	//start time
+	time = 0;
+	//wait until signal is high
+	while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) != 1){
+		time++;
+		//delay 1us;
+		HAL_Delay(0.001);
+	}
+	//return distance in cm
+	return (float)time * ((float)0.0171821);
+}
+
+float sensorRead2(void){
+	uint32_t time, timeout;
+	//set trigger low
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2,GPIO_PIN_RESET);
+	//delay 2us
+	HAL_Delay(0.002);
+	//trigger high for 10us
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2,GPIO_PIN_SET);
+	//delay 10us
+	HAL_Delay(0.010);
+	//trigger low
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2,GPIO_PIN_RESET);
+
+	//give some time for response
+	timeout = 1000000;
+	while(timeout > 0){
+		timeout--;
+	}
+//	while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) != 0 || HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) != 1){
+//		if(timeout-- == 0x00){
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6,GPIO_PIN_SET);
+//			return -1;
+//		}
+//	}
+
+	//start time
+	time = 0;
+	//wait until signal is high
+	while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) != 1){
+		time++;
+		//delay 1us;
+		HAL_Delay(0.001);
+	}
+	//return distance in cm
+	return (float)time * ((float)0.0171821);
+}
+
 int main(void)
 {
 	HAL_Init();
@@ -127,27 +196,74 @@ int main(void)
 	MX_GPIO_Init();
 
 	//Output Test
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6|GPIO_PIN_3|GPIO_PIN_5|
-			GPIO_PIN_4, GPIO_PIN_SET);  							// Indicator Light, RED, GREEN, BLUE On
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);				// Buzzer On
-	segmentDriver(0, 8);										// DIGIT 0 set to 8
-	segmentDriver(1, 8);										// Digit 1 set to 8
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6|GPIO_PIN_3|GPIO_PIN_5|GPIO_PIN_4, GPIO_PIN_SET);  							// Indicator Light, RED, GREEN, BLUE On
+//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);				// Buzzer On
+//	segmentDriver(0, 8);										// DIGIT 0 set to 8
+//	segmentDriver(1, 8);										// Digit 1 set to 8
+//
+//
+//	HAL_Delay(1000);		// Delay for 1000ms
+//
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6|GPIO_PIN_3|GPIO_PIN_5|GPIO_PIN_4, GPIO_PIN_RESET);  						// Indicator Light, RED, GREEN, BLUE Off
+//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);			// Buzzer Off
+//	segmentDriver(0, 0);										// DIGIT 0 set to 0
+//	segmentDriver(1, 0);										// DIGIT 1 set to 0
 
 
-	HAL_Delay(1000);		// Delay for 1000ms
+	long distance;
 
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6|GPIO_PIN_3|GPIO_PIN_5|
-				GPIO_PIN_4, GPIO_PIN_RESET);  						// Indicator Light, RED, GREEN, BLUE Off
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);			// Buzzer Off
-	segmentDriver(0, 0);										// DIGIT 0 set to 0
-	segmentDriver(1, 0);										// DIGIT 1 set to 0
-
+//	while(1){
+//		//read distance from sensor
+//		//distance is returned in cm
+//		distance = sensorRead2();
+//		if(distance < 0){
+//
+//		}else if(distance > 50){
+//			//more than 50cm
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6,GPIO_PIN_SET);
+//		}else {
+//			//between 0 and 50cm
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6,GPIO_PIN_SET);
+//		}
+//		HAL_Delay(0.1);
+//	}
 
 	while(1){
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6);
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
-		HAL_Delay(1000);
+		distance = sensorRead2();
+//		if(distance < 0.000005){
+		if(distance < 0){
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6,GPIO_PIN_SET);
+		}else{
+			int i = 0;
+			while(i < 3){
+				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6,GPIO_PIN_SET);
+				HAL_Delay(2000);
+				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6,GPIO_PIN_RESET);
+				HAL_Delay(2000);
+				i++;
+			}
+		}
 	}
+//	while(1){
+//		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6,GPIO_PIN_RESET);
+//		HAL_Delay(2000);
+//		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6,GPIO_PIN_SET);
+//		HAL_Delay(2000);
+//	}
+//	while(1){
+//		//write a short LOW pulse beforehand to ensure a clean HIGH pulse
+//		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2,GPIO_PIN_RESET);
+//		HAL_Delay(0.005); //miliseconds
+//		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2,GPIO_PIN_SET);
+//		HAL_Delay(0.01);
+//		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2,GPIO_PIN_SET);
+//	}
+
+//	while(1){
+//		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6);
+//		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
+//		HAL_Delay(1000);
+//	}
 }
 
 

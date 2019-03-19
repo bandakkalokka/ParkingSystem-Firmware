@@ -31,10 +31,10 @@ endif
 all: Wall-E-Parking.elf
 
 # Tool invocations
-Wall-E-Parking.elf: $(OBJS) $(USER_OBJS) C:\Users\House\Documents\ParkingSystem-Firmware\Wall-E-Parking/LinkerScript.ld
+Wall-E-Parking.elf: $(OBJS) $(USER_OBJS) /Users/Sara/Desktop/ENEL400_2/wallE/ParkingSystem-Firmware/Wall-E-Parking/LinkerScript.ld
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU GCC Linker'
-	arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -T"C:/Users/House/Documents/ParkingSystem-Firmware/Wall-E-Parking/LinkerScript.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "Wall-E-Parking.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
+	arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -T"/Users/Sara/Desktop/ENEL400_2/wallE/ParkingSystem-Firmware/Wall-E-Parking/LinkerScript.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "Wall-E-Parking.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
